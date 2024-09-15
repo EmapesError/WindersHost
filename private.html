@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+        .login-form, .content, .balance-sheet {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .login-form h2, .content h2, .balance-sheet h2 {
+            margin-top: 0;
+        }
+        .login-form input[type="password"], .balance-sheet select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .login-form button, .balance-sheet button {
+            background: #1e1e1e;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .login-form button:hover, .balance-sheet button:hover {
+            background: #333;
+        }
+        .content table, .balance-sheet table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .content table, .balance-sheet table, .content th, .content td, .balance-sheet th, .balance-sheet td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .content th, .balance-sheet th {
+            background-color: #1e1e1e;
+            color: #fff;
+            text-align: left;
+        }
+        .content td, .balance-sheet td {
+            text-align: left;
+        }
+        .balance-sheet {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Game Hosting Store - Admin Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="login-form" id="login-form">
+            <h2>Admin Login</h2>
+            <input type="password" id="password" placeholder="Enter Password">
+            <button onclick="validatePassword()">Login</button>
+        </div>
+
+        <div class="content" id="content">
+            <h2>Orders Overview</h2>
+            <p>Below is a comprehensive overview of all user details and order information.</p>
+            
+            <!-- Example Orders Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Product</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Order Time</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table">
+                    <!-- Example Data -->
+                    <tr>
+                        <td>12345</td>
+                        <td>John Doe</td>
+                        <td>JD Corp</td>
+                        <td>john.doe@example.com</td>
+                        <td>1234567890</td>
+                        <td>New Delhi</td>
+                        <td>110001</td>
+                        <td>Minecraft Hosting</td>
+                        <td>₹50</td>
+                        <td>2024-09-15</td>
+                        <td>14:30</td>
+                    </tr>
+                    <!-- Add more rows dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="balance-sheet" id="balance-sheet">
+            <h2>Balance Sheet</h2>
+            <p>This section provides an overview of the orders and allows you to generate a PDF report.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Product</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Order Time</th>
+                    </tr>
+                </thead>
+                <tbody id="balance-sheet-table">
+                    <!-- Dynamic Content Here -->
+                </tbody>
+            </table>
+            
+            <button onclick="generatePDF()">Download PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPDF/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function validatePassword() {
+            var inputPassword = document.getElementById('password').value;
+            var correctPassword = 'emapes786emapes';
+            
+            if (inputPassword === correctPassword) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('balance-sheet').style.display = 'block';
+                autoGenerateBalanceSheet();
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        }
+
+        // Automatically update the balance sheet every 24 hours
+        function autoGenerateBalanceSheet() {
+            setInterval(function () {
+                generateBalanceSheet();
+            }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
+        }
+
+        // Example function to generate the balance sheet data dynamically
+        function generateBalanceSheet() {
+            const balanceSheetTable = document.getElementById('balance-sheet-table');
+            balanceSheetTable.innerHTML = ''; // Clear previous data
+
+            const data = [
+                ['12345', 'John Doe', '1234567890', 'john.doe@example.com', 'Minecraft Hosting', '₹50', '2024-09-15', '14:30'],
+                ['12346', 'Jane Smith', '0987654321', 'jane.smith@example.com', 'FiveM Hosting', '₹50', '2024-09-16', '16:45']
+                // Add more rows dynamically
+            ];
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                balanceSheetTable.appendChild(tr);
+            });
+        }
+
+        // Generate a downloadable PDF of the balance sheet
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.text('Balance Sheet', 20, 10);
+            
+            let y = 20;
+            const rows = [
+                ['Order ID', 'Name', 'Phone', 'Email', 'Product', 'Amount', 'Date', 'Order Time'],
+                ['12345', 'John Doe', '1234567890', 'john.doe@example.com', 'Minecraft Hosting', '₹50', '2024-09-15', '14:30'],
+                ['12346', 'Jane Smith', '0987654321', '
