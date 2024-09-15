@@ -101,7 +101,7 @@
         <div class="content" id="content">
             <h2>Orders Overview</h2>
             <p>Below is a comprehensive overview of all user details and order information.</p>
-            
+
             <!-- Example Orders Table -->
             <table>
                 <thead>
@@ -119,8 +119,8 @@
                         <th>Order Time</th>
                     </tr>
                 </thead>
-                <tbody id="orders-table">
-                    <!-- Example Data -->
+                <tbody>
+                    <!-- Example Data - Replace with actual data -->
                     <tr>
                         <td>12345</td>
                         <td>John Doe</td>
@@ -134,7 +134,20 @@
                         <td>2024-09-15</td>
                         <td>14:30</td>
                     </tr>
-                    <!-- Add more rows dynamically -->
+                    <tr>
+                        <td>12346</td>
+                        <td>Jane Smith</td>
+                        <td>Smith Enterprises</td>
+                        <td>jane.smith@example.com</td>
+                        <td>0987654321</td>
+                        <td>Mumbai</td>
+                        <td>400001</td>
+                        <td>FiveM Hosting</td>
+                        <td>₹50</td>
+                        <td>2024-09-16</td>
+                        <td>16:45</td>
+                    </tr>
+                    <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </div>
@@ -142,7 +155,7 @@
         <div class="balance-sheet" id="balance-sheet">
             <h2>Balance Sheet</h2>
             <p>This section provides an overview of the orders and allows you to generate a PDF report.</p>
-            
+
             <table>
                 <thead>
                     <tr>
@@ -156,11 +169,32 @@
                         <th>Order Time</th>
                     </tr>
                 </thead>
-                <tbody id="balance-sheet-table">
-                    <!-- Dynamic Content Here -->
+                <tbody>
+                    <!-- Example Data - Replace with actual data -->
+                    <tr>
+                        <td>12345</td>
+                        <td>John Doe</td>
+                        <td>1234567890</td>
+                        <td>john.doe@example.com</td>
+                        <td>Minecraft Hosting</td>
+                        <td>₹50</td>
+                        <td>2024-09-15</td>
+                        <td>14:30</td>
+                    </tr>
+                    <tr>
+                        <td>12346</td>
+                        <td>Jane Smith</td>
+                        <td>0987654321</td>
+                        <td>jane.smith@example.com</td>
+                        <td>FiveM Hosting</td>
+                        <td>₹50</td>
+                        <td>2024-09-16</td>
+                        <td>16:45</td>
+                    </tr>
+                    <!-- Add more rows as needed -->
                 </tbody>
             </table>
-            
+
             <button onclick="generatePDF()">Download PDF</button>
         </div>
     </div>
@@ -170,55 +204,38 @@
         function validatePassword() {
             var inputPassword = document.getElementById('password').value;
             var correctPassword = 'emapes786emapes';
-            
+
             if (inputPassword === correctPassword) {
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
                 document.getElementById('balance-sheet').style.display = 'block';
-                autoGenerateBalanceSheet();
             } else {
                 alert('Incorrect password. Please try again.');
             }
         }
 
-        // Automatically update the balance sheet every 24 hours
-        function autoGenerateBalanceSheet() {
-            setInterval(function () {
-                generateBalanceSheet();
-            }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
-        }
-
-        // Example function to generate the balance sheet data dynamically
-        function generateBalanceSheet() {
-            const balanceSheetTable = document.getElementById('balance-sheet-table');
-            balanceSheetTable.innerHTML = ''; // Clear previous data
-
-            const data = [
-                ['12345', 'John Doe', '1234567890', 'john.doe@example.com', 'Minecraft Hosting', '₹50', '2024-09-15', '14:30'],
-                ['12346', 'Jane Smith', '0987654321', 'jane.smith@example.com', 'FiveM Hosting', '₹50', '2024-09-16', '16:45']
-                // Add more rows dynamically
-            ];
-
-            data.forEach(row => {
-                const tr = document.createElement('tr');
-                row.forEach(cell => {
-                    const td = document.createElement('td');
-                    td.textContent = cell;
-                    tr.appendChild(td);
-                });
-                balanceSheetTable.appendChild(tr);
-            });
-        }
-
-        // Generate a downloadable PDF of the balance sheet
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             doc.text('Balance Sheet', 20, 10);
-            
+
             let y = 20;
             const rows = [
                 ['Order ID', 'Name', 'Phone', 'Email', 'Product', 'Amount', 'Date', 'Order Time'],
                 ['12345', 'John Doe', '1234567890', 'john.doe@example.com', 'Minecraft Hosting', '₹50', '2024-09-15', '14:30'],
-                ['12346', 'Jane Smith', '0987654321', '
+                ['12346', 'Jane Smith', '0987654321', 'jane.smith@example.com', 'FiveM Hosting', '₹50', '2024-09-16', '16:45']
+                // Add more rows as needed
+            ];
+
+            doc.autoTable({
+                head: [rows[0]],
+                body: rows.slice(1),
+                startY: y
+            });
+
+            doc.save('balance-sheet.pdf');
+        }
+    </script>
+</body>
+</html>
